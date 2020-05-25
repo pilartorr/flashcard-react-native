@@ -1,36 +1,88 @@
-import * as React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+ 
+import React from 'react'
+import { View, Platform, StatusBar } from 'react-native'
+import Constants from "expo-constants";
 
-const instructions = Platform.select({
-  ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-  android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
+import DecksList from './components/DecksList'
+import AddDeck from './components/AddDeck'
+import Deck from './components/Deck'
 
-export default function App() {
+import { NavigationContainer } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+
+import { purple, white } from './utils/colors'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
+
+function AppStatusBar({ backgroundColor, ...props }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to React Native!</Text>
-      <Text style={styles.instructions}>To get started, edit App.js</Text>
-      <Text style={styles.instructions}>{instructions}</Text>
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+const Tabs = createMaterialTopTabNavigator();
+
+const TabNav = () => (
+  <Tabs.Navigator
+    initialRouteName="DecksList"
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        if (route.name === "DecksList") {
+          <Ionicons name="ios-bookmarks" size={size} color={color} />
+        } else if (route.name === "Add Deck") {
+          <FontAwesome name="plus-square" size={size} color={color} />
+        } 
+      }
+    })}
+    tabBarOptions={{
+      activeTintColor: Platform.OS === "ios" ? purple : white,
+      style: {
+        height: 50,
+        backgroundColor: Platform.OS === "ios" ? white : purple,
+        shadowColor: "rgba(0, 0, 0, 0.24)",
+        shadowOffset: {
+          width: 0,
+          height: 3
+        },
+        shadowRadius: 6,
+        shadowOpacity: 1
+      }
+    }}
+  >
+    <Tabs.Screen name="DecksList" component={DecksList} />
+    <Tabs.Screen name="Add Deck" component={AddDeck} />
+  </Tabs.Navigator>
+)
+
+const Stack = createStackNavigator();
+const MainNav = () => (
+  <Stack.Navigator headerMode="screen">
+      <Stack.Screen
+          name="Home"
+          component={TabNav}
+          options={{headerShown: false}}/>
+      <Stack.Screen
+          name="Deck"
+          component={Deck}
+          options={{
+              headerTintColor: white, headerStyle: {
+                  backgroundColor: purple,
+              }
+          }}/>
+  </Stack.Navigator>
+);
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <AppStatusBar backgroundColor={purple} barStyle="light-content" />
+        <NavigationContainer>
+          <MainNav/>
+        </NavigationContainer>
+      </View>
+    );
+  } 
+}
