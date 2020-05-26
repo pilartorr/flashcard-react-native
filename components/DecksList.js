@@ -1,27 +1,38 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { purple } from '../utils/colors';
-  
-export default function DecksList() {
-  return (
-    <View>
-      <View style={styles.container}>
-        <Text style={styles.title}>Card 1</Text>
-        <Text style={styles.number}>0 cards</Text>
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { getDecks } from "../utils/helpers";
+import { purple, white } from '../utils/colors';
+
+export default class DeckList extends React.Component {
+  render(){
+    const decks = getDecks();
+    const { navigation } = this.props
+    return(
+      <View>
+        { Object.keys(decks).map((deck) => {
+          const { title, questions } = decks[deck]
+          const numbersOfCards = questions.length
+          console.log(numbersOfCards)
+          return ( 
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Deck", { title: title })}
+            >
+              <View style={styles.container} key={deck}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.number}>{numbersOfCards} cards</Text>
+              </View> 
+            </TouchableOpacity>
+          );
+        })}
       </View>
-      <View style={styles.container}>
-        <Text style={styles.title}>Card 2</Text>
-        <Text style={styles.number}>0 cards</Text>
-      </View>
-    </View>
-    
-  );
+    )   
+  }  
 }
 
 const styles = StyleSheet.create({
   container: { 
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: white,
     borderRadius: 2,
     padding: 10,
     marginLeft: 10,

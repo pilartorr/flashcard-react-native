@@ -5,10 +5,15 @@ import Constants from "expo-constants";
 
 import DecksList from './components/DecksList'
 import AddDeck from './components/AddDeck'
+import Deck from './components/Deck'
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from './reducers'
 
 import { purple, white } from './utils/colors'
 
@@ -52,18 +57,24 @@ const MainNav = () => (
           name="Home"
           component={TabNav}
           options={{headerShown: false}}/>
+      <Stack.Screen
+          name="Deck"
+          component={Deck}
+          options={{headerShown: false}}/>
   </Stack.Navigator>
 );
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <AppStatusBar backgroundColor={purple} barStyle="light-content" />
-        <NavigationContainer>
-          <MainNav/>
-        </NavigationContainer>
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={{ flex: 1 }}>
+          <AppStatusBar backgroundColor={purple} barStyle="light-content" />
+          <NavigationContainer>
+            <MainNav/>
+          </NavigationContainer>
+        </View>
+      </Provider>
     );
   } 
 }

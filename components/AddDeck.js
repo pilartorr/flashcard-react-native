@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native'
-import { purple, pink, white } from '../utils/colors';
+import { purple, blue, white } from '../utils/colors';
 
 class AddDeck extends Component {
     render(){
@@ -12,7 +12,6 @@ class AddDeck extends Component {
                         style={styles.textInput}
                         value=""
                         placeholder="Please, type here a title for the new card"
-                        onChangeText=""
                     />
                 </View>
                 <TouchableOpacity>
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     submitBtn: {
-        backgroundColor: pink,
+        backgroundColor: blue,
         color: white,  
         fontSize: 17,
         padding: 10,
