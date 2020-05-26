@@ -5,7 +5,6 @@ import Constants from "expo-constants";
 
 import DecksList from './components/DecksList'
 import AddDeck from './components/AddDeck'
-import Deck from './components/Deck'
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -53,14 +52,6 @@ const MainNav = () => (
           name="Home"
           component={TabNav}
           options={{headerShown: false}}/>
-      <Stack.Screen
-          name="Deck"
-          component={Deck}
-          options={{
-              headerTintColor: white, headerStyle: {
-                  backgroundColor: purple,
-              }
-          }}/>
   </Stack.Navigator>
 );
 
