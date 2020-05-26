@@ -1,6 +1,6 @@
  
 import React from 'react'
-import { View, Platform, StatusBar } from 'react-native'
+import { View, StatusBar } from 'react-native'
 import Constants from "expo-constants";
 
 import DecksList from './components/DecksList'
@@ -12,7 +12,6 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { purple, white } from './utils/colors'
-import { FontAwesome, Ionicons } from '@expo/vector-icons'
 
 function AppStatusBar({ backgroundColor, ...props }) {
   return (
@@ -27,20 +26,11 @@ const Tabs = createMaterialTopTabNavigator();
 const TabNav = () => (
   <Tabs.Navigator
     initialRouteName="DecksList"
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ color, size }) => {
-        if (route.name === "DecksList") {
-          <Ionicons name="ios-bookmarks" size={size} color={color} />
-        } else if (route.name === "Add Deck") {
-          <FontAwesome name="plus-square" size={size} color={color} />
-        } 
-      }
-    })}
     tabBarOptions={{
-      activeTintColor: Platform.OS === "ios" ? purple : white,
+      activeTintColor: white,
       style: {
         height: 50,
-        backgroundColor: Platform.OS === "ios" ? white : purple,
+        backgroundColor: purple,
         shadowColor: "rgba(0, 0, 0, 0.24)",
         shadowOffset: {
           width: 0,
@@ -51,7 +41,7 @@ const TabNav = () => (
       }
     }}
   >
-    <Tabs.Screen name="DecksList" component={DecksList} />
+    <Tabs.Screen name="Decks" component={DecksList} />
     <Tabs.Screen name="Add Deck" component={AddDeck} />
   </Tabs.Navigator>
 )
