@@ -1,40 +1,49 @@
-export const GET_DECKS = "GET_DECKS";
-export const ADD_DECK = "ADD_DECK";
-export const ADD_CARD = "ADD_CARD";
-export const DEL_DECK = "DEL_DECK";
-export const DEL_ALL = "DEL_ALL";
+import { getDecks } from '../utils/api';
+
+export const RECEIVE_DECKS = 'RECEIVE_DECKS';
+export const ADD_DECK = 'ADD_DECK';
+export const REMOVE_DECK = 'REMOVE_DECK';
+export const ADD_CARD = 'ADD_CARD';
+export const RESET_STORE = 'RESET_STORE';
 
 export function receiveDecks(decks) {
   return {
-    type: GET_DECKS,
+    type: RECEIVE_DECKS,
     decks
   };
 }
 
-export function addNewDeck(deck) {
+export function addDeck(title) {
   return {
     type: ADD_DECK,
-    deck
+    title
   };
 }
 
-export function addNewCard(title, card) {
+export function removeDeck(id) {
+  return {
+    type: REMOVE_DECK,
+    id
+  };
+}
+
+export function addCardToDeck(deckId, card) {
   return {
     type: ADD_CARD,
-    title,
+    deckId,
     card
   };
 }
 
-export function deleteDeckInStore(deckName) {
+export function resetStore() {
   return {
-    type: DEL_DECK,
-    deckName
+    type: RESET_STORE
   };
 }
-
-export function deleteAllDecksInStore() {
-  return {
-    type: DEL_ALL
+export function handleInitialData() {
+  return dispatch => {
+    return getDecks().then(decks => {
+      dispatch(receiveDecks(decks));
+    });
   };
 }

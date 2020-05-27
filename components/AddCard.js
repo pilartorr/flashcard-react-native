@@ -1,54 +1,70 @@
 import React, { Component} from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native'
 import { purple, blue, white } from '../utils/colors';
-import { connect } from 'react-redux'
-import { CommonActions } from '@react-navigation/native';
-import { addDeck } from '../actions/index';
 
-class AddDeck extends Component {
+const SubmitBtn = ({ onPress }) => {
+    return (
+      <TouchableOpacity onPress={onPress}>
+        <Text style={styles.submitBtn}>Add title</Text>
+      </TouchableOpacity>
+    );
+};
+
+class AddCard extends Component {
     state = {
-        titleDeck: '',
+        question: "",
+        answer: "",
     };
-    handleChange = value => {
+    handleQuestion = (value) => {
         this.setState({
-            titleDeck: value
+            question: value
         })
     }
-    handleSubmit = () => {
-        const { titleDeck } = this.state
-
-        this.props.addDeck(titleDeck)
-        this.toHome();
-        this.setState(() => ({ titleDeck: '' }));
+    handleAnswer = (value) => {
+        this.setState({
+            answer: value
+        })
     }
-    toHome = () => {
-        this.props.navigation.dispatch(
-            CommonActions.goBack({
-                key: 'DecksList',
-            }))
+    submitOptions = (e) => {
+        e.preventDefault()
+
+        const { question, answer } = this.state
+
+        this.props.newDeck(question, answer)
+
+        this.setState(() => ({
+            toHome: true
+        }))
     }
     render(){
+        const { firstOption, secondOption, toHome } = this.state
+        const { navigation } = this.props
+
+        if (toHome === true) {
+          return    <TouchableOpacity onPress={() => navigation.navigate("DecksList")} >
+                        <Text>Go to Home</Text>
+                    </TouchableOpacity>
+        }
+
         return (
             <View style={styles.container}>
                 <Text style={styles.heading}>What is the title of your new Deck?</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.textInput}
-                        value={this.state.titleDeck}
-                        onChangeText={this.handleChange}
+                        value=""
+                        onChangeText={value => onChangeText(value, name)}
+                        {...props}
                         placeholder="Please, type here a title for the new card"
                     />
                 </View>
-                <TouchableOpacity onPress={this.handleSubmit}>
-                    <Text style={styles.submitBtn}>Add title</Text>
-                </TouchableOpacity>
+                <SubmitBtn onPress={this.submit} />
             </View>
         )
     }
 }
 
-
-export default connect(null, { addDeck })(AddDeck);
+export default AddCard
 
 const styles = StyleSheet.create({
     container: {
@@ -97,4 +113,4 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         height: 45
       }
-});
+  });
