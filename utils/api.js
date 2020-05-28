@@ -1,16 +1,51 @@
+import { AsyncStorage } from 'react-native';
+import { decks } from './_DATA';
 
-import { AsyncStorage } from "react-native";
+const DECKS_STORAGE_KEY = 'Flashcards:decks';
 
-//getDecks will get us the decks[DONE]
-//getDeck will give us all the info of that deck [Done]
-//saveDeck will save a new deck [DONE]
-//addCardToDeck will save the {question, answer} to that deck title
-
-const DECK_STORAGE_KEY = "Flashcards:decks";
-
-export function getDecksData() {
-  return AsyncStorage.getItem(DECK_STORAGE_KEY).then(results => {
-    return JSON.parse(results);
-  });
+export function getData() {
+  return decks;
 }
 
+function formatDeckResults(results) {
+  return results === null ? decks : JSON.parse(results);
+}
+
+export function getDecksOld() {
+  return AsyncStorage.getItem(DECKS_STORAGE_KEY).then(formatDeckResults);
+}
+
+export async function getDecks() {
+  try {
+    const storeResults = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
+    if (storeResults === null) {
+      AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(decks));
+    }
+    return storeResults === null ? decks : JSON.parse(storeResults);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getDeck(id) {
+  try {
+    const storeResults = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
+    return JSON.parse(storeResults)[id];
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function saveDeck(title) {
+  try {
+    await AsyncStorage.mergeItem( DECKS_STORAGE_KEY, JSON.stringify({
+        [title]: {
+          title,
+          questions: []
+        }
+      })
+    );
+  } catch (err) {
+    console.log(err);
+  }
+}

@@ -5,6 +5,7 @@ import Constants from "expo-constants";
 
 import DecksList from './components/DecksList'
 import AddDeck from './components/AddDeck'
+import DeckDetail from './components/DeckDetail'
 import Deck from './components/Deck'
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,7 +14,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import reducer from './reducers'
+import rootReducer from './reducers/index'
+import middleware from './middleware/index'
 
 import { purple, white } from './utils/colors'
 
@@ -53,21 +55,25 @@ const TabNav = () => (
 const Stack = createStackNavigator();
 const MainNav = () => (
   <Stack.Navigator headerMode="screen">
-      <Stack.Screen
-          name="Home"
-          component={TabNav}
-          options={{headerShown: false}}/>
-      <Stack.Screen
-          name="Deck"
-          component={Deck}
-          options={{headerShown: false}}/>
+    <Stack.Screen
+      name="Home"
+      component={TabNav}
+      options={{headerShown: false}}/>
+    <Stack.Screen
+      name="Deck"
+      component={Deck}
+      options={{headerShown: false}}/>
+    <Stack.Screen
+      name="DeckDetail"
+      component={DeckDetail}
+      options={{headerShown: false}}/>
   </Stack.Navigator>
 );
 
 export default class App extends React.Component {
   render() {
     return (
-      <Provider store={createStore(reducer)}>
+      <Provider store={createStore(rootReducer, middleware)}>
         <View style={{ flex: 1 }}>
           <AppStatusBar backgroundColor={purple} barStyle="light-content" />
           <NavigationContainer>

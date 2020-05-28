@@ -2,14 +2,6 @@ import React, { Component} from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native'
 import { purple, blue, white } from '../utils/colors';
 
-const SubmitBtn = ({ onPress }) => {
-    return (
-      <TouchableOpacity onPress={onPress}>
-        <Text style={styles.submitBtn}>Add title</Text>
-      </TouchableOpacity>
-    );
-};
-
 class AddCard extends Component {
     state = {
         question: "",
@@ -25,40 +17,43 @@ class AddCard extends Component {
             answer: value
         })
     }
-    submitOptions = (e) => {
+    handleSubmit = (e) => {
         e.preventDefault()
 
         const { question, answer } = this.state
 
-        this.props.newDeck(question, answer)
+        this.props.addCard(question, answer)
 
-        this.setState(() => ({
-            toHome: true
-        }))
+        saveCard(question, answer)
+        this.toHome();
+    }
+    toHome = () => {
+        this.props.navigation.dispatch(
+            CommonActions.goBack({
+                key: 'DecksList',
+            }))
     }
     render(){
-        const { firstOption, secondOption, toHome } = this.state
-        const { navigation } = this.props
-
-        if (toHome === true) {
-          return    <TouchableOpacity onPress={() => navigation.navigate("DecksList")} >
-                        <Text>Go to Home</Text>
-                    </TouchableOpacity>
-        }
-
         return (
             <View style={styles.container}>
-                <Text style={styles.heading}>What is the title of your new Deck?</Text>
+                <Text style={styles.heading}>Create a new card</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.textInput}
-                        value=""
-                        onChangeText={value => onChangeText(value, name)}
-                        {...props}
-                        placeholder="Please, type here a title for the new card"
+                        value={this.state.question}
+                        onChangeText={this.handleQuestion}
+                        placeholder="Please, type here the question"
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        value={this.state.answer}
+                        onChangeText={this.handleAnswer}
+                        placeholder="Please, type here the answer"
                     />
                 </View>
-                <SubmitBtn onPress={this.submit} />
+                <TouchableOpacity onPress={this.handleSubmit}>
+                    <Text style={styles.submitBtn}>Add Card</Text>
+                </TouchableOpacity>
             </View>
         )
     }

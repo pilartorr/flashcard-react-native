@@ -20,26 +20,6 @@ export function addDeck(title) {
   };
 }
 
-export function removeDeck(id) {
-  return {
-    type: REMOVE_DECK,
-    id
-  };
-}
-
-export function addCardToDeck(deckId, card) {
-  return {
-    type: ADD_CARD,
-    deckId,
-    card
-  };
-}
-
-export function resetStore() {
-  return {
-    type: RESET_STORE
-  };
-}
 export function handleInitialData() {
   return dispatch => {
     return getDecks().then(decks => {

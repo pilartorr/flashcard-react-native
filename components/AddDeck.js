@@ -4,22 +4,27 @@ import { purple, blue, white } from '../utils/colors';
 import { connect } from 'react-redux'
 import { CommonActions } from '@react-navigation/native';
 import { addDeck } from '../actions/index';
+import { saveDeck } from '../utils/api';
 
 class AddDeck extends Component {
     state = {
-        titleDeck: '',
+        title: '',
     };
     handleChange = value => {
         this.setState({
-            titleDeck: value
+            title: value
         })
     }
     handleSubmit = () => {
-        const { titleDeck } = this.state
+        const { title } = this.state
 
-        this.props.addDeck(titleDeck)
+        this.props.addDeck(title);
+        saveDeck(title)
+        
         this.toHome();
-        this.setState(() => ({ titleDeck: '' }));
+        this.setState({
+            title: ''
+        })
     }
     toHome = () => {
         this.props.navigation.dispatch(
@@ -34,7 +39,7 @@ class AddDeck extends Component {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.textInput}
-                        value={this.state.titleDeck}
+                        value={this.state.title}
                         onChangeText={this.handleChange}
                         placeholder="Please, type here a title for the new card"
                     />
@@ -46,9 +51,6 @@ class AddDeck extends Component {
         )
     }
 }
-
-
-export default connect(null, { addDeck })(AddDeck);
 
 const styles = StyleSheet.create({
     container: {
@@ -98,3 +100,7 @@ const styles = StyleSheet.create({
         height: 45
       }
 });
+
+
+export default connect(null, { addDeck })(AddDeck)
+

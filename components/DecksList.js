@@ -1,30 +1,36 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { getDecks } from "../utils/helpers";
-import { purple, white } from '../utils/colors';
+import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { connect } from 'react-redux'
+import { handleInitialData } from '../actions/index';
+import { white } from '../utils/colors';
+import Deck from './Deck'
 
-export default class DeckList extends React.Component {
+class DeckList extends React.Component {
+  componentDidMount() {
+    this.props.handleInitialData();
+  }
   render(){
-    const decks = getDecks();
-    const { navigation } = this.props
+    const { decks, navigation } = this.props;
+    console.log(Object.values(decks))
     return(
-      <View>
-        { Object.keys(decks).map((deck) => {
-          const { title, questions } = decks[deck]
-          const numbersOfCards = questions.length
-          console.log(numbersOfCards)
+      <ScrollView>
+        { Object.values(decks).map((deck) => {
+
           return ( 
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Deck", { title: title })}
-            >
-              <View style={styles.container} key={deck}>
-                <Text style={styles.title}>{title}</Text>
-                <Text style={styles.number}>{numbersOfCards} cards</Text>
-              </View> 
-            </TouchableOpacity>
+            <View style={styles.container}>
+              <TouchableOpacity
+                key={deck.title}
+                onPress={() =>
+                  navigation.navigate('DeckDetail', { title: deck.title })
+                }
+              > 
+                <Deck id={deck.title} />
+              </TouchableOpacity>           
+            </View>
+            
           );
         })}
-      </View>
+      </ScrollView>
     )   
   }  
 }
@@ -47,13 +53,9 @@ const styles = StyleSheet.create({
     },
     height: 150,
     justifyContent: "center"
-  },
-  title: {
-    fontSize: 40,
-    color: purple,
-    fontWeight: "bold"
-  },
-  number: {
-    fontSize: 25
   }
 });
+
+const mapStateToProps = state => ({ decks: state });
+
+export default connect(mapStateToProps, { handleInitialData })(DeckList);
