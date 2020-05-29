@@ -60,10 +60,6 @@ const MainNav = () => (
       component={TabNav}
       options={{headerShown: false}}/>
     <Stack.Screen
-      name="Deck"
-      component={Deck}
-      options={{headerShown: false}}/>
-    <Stack.Screen
       name="DeckDetail"
       component={DeckDetail}
       options={{headerShown: false}}/>

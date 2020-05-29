@@ -15,7 +15,6 @@ class DeckList extends React.Component {
     return(
       <ScrollView>
         { Object.values(decks).map((deck) => {
-
           return ( 
             <View style={styles.container}>
               <TouchableOpacity
@@ -24,8 +23,7 @@ class DeckList extends React.Component {
               > 
                 <Deck id={deck.title} />
               </TouchableOpacity>           
-            </View>
-            
+            </View>           
           );
         })}
       </ScrollView>

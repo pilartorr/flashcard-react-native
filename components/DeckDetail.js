@@ -8,6 +8,7 @@ class DeckDetail extends React.Component {
     shouldComponentUpdate(nextProps) {
         return nextProps.deck !== undefined;
     }
+
     render() {
         const { deck } = this.props;
         return (
@@ -53,11 +54,13 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
-    const deck = state;  
+const mapStateToProps = (state, {route}) => {
+    const title = route.params.title;
+    const deck = state[title];
+  
     return {
       deck
     };
-  };
+};
   
   export default connect(mapStateToProps)(DeckDetail);
