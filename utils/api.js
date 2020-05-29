@@ -49,3 +49,28 @@ export async function saveDeck(title) {
     console.log(err);
   }
 }
+
+export async function removeDeckAPI(title) {
+  try {
+    const results = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
+    const data = JSON.parse(results);
+    data[title] = undefined;
+    delete data[title];
+    AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+{/*export function deleteDeck(title) {
+  return AsyncStorage.getItem(DECK_STORAGE_KEY).then(results => {
+    const data = JSON.parse(results);
+    const newData = Object.keys(data).reduce((newObj, key) => {
+      if (key !== title) {
+        newObj[key] = data[key];
+      }
+      return newObj;
+    }, {});
+    AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(newData));
+  });
+}*/}

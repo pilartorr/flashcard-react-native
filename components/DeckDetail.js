@@ -3,14 +3,21 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { blue, white, red, green } from '../utils/colors';
 import Deck from './Deck'
 import { connect } from 'react-redux'
+import { removeDeck } from '../actions/index';
+import { removeDeckAPI } from '../utils/api';
 
 class DeckDetail extends React.Component {
-    shouldComponentUpdate(nextProps) {
-        return nextProps.deck !== undefined;
+    handleDelete = id => {
+        const { removeDeck, navigation } = this.props;  
+        
+        removeDeck(id);
+        removeDeckAPI(id);
+    
+        //navigation.goBack();
     }
-
     render() {
         const { deck } = this.props;
+        console.log(deck)
         return (
             <View style={styles.container}>
                 <Deck id={deck.title} />
@@ -20,7 +27,7 @@ class DeckDetail extends React.Component {
                 <TouchableOpacity>
                     <Text style={[styles.btn, styles.start]}>Start Quiz</Text>
                 </TouchableOpacity> 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => this.handleDelete(deck)}>
                     <Text style={[styles.btn, styles.delete]}>Delete</Text>
                 </TouchableOpacity> 
             </View>
@@ -62,4 +69,4 @@ const mapStateToProps = (state, {route}) => {
     };
 };
   
-  export default connect(mapStateToProps)(DeckDetail);
+export default connect(mapStateToProps, { removeDeck })(DeckDetail);

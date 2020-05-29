@@ -1,6 +1,7 @@
 import {
   RECEIVE_DECKS,
   ADD_DECK,
+  REMOVE_DECK
 } from '../actions/index';
 
 export default function decks(state = {}, action) {
@@ -19,7 +20,12 @@ export default function decks(state = {}, action) {
           questions: []
         }
       };
+    case REMOVE_DECK:
+      const { id } = action;
+        const { [id]: value, ...remainingDecks } = state;
+        return remainingDecks;
     default:
       return state;
   }
 }
+
