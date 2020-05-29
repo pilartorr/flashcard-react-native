@@ -11,17 +11,14 @@ class DeckList extends React.Component {
   }
   render(){
     const { decks, navigation } = this.props;
-    console.log(Object.values(decks))
+
     return(
       <ScrollView>
         { Object.values(decks).map((deck) => {
           return ( 
-            <View style={styles.container}>
-              <TouchableOpacity
-                key={deck.title}
-                onPress={() => navigation.navigate('DeckDetail', { title: deck.title })}
-              > 
-                <Deck id={deck.title} />
+            <View style={styles.container} key={deck.title}> 
+              <TouchableOpacity onPress={() => navigation.navigate('DeckDetail', { title: deck.title })}> 
+                <Deck id={deck.title}  />
               </TouchableOpacity>           
             </View>           
           );
