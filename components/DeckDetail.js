@@ -13,7 +13,6 @@ class DeckDetail extends React.Component {
         const { deck } = this.props;
         return (
             <View style={styles.container}>
-                <Text>Deck Detail</Text>
                 <Deck id={deck.title} />
                 <TouchableOpacity>
                     <Text style={styles.btn}>Add Card</Text>
