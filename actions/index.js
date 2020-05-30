@@ -12,6 +12,14 @@ export function receiveDecks(decks) {
   };
 }
 
+export function handleInitialData() {
+  return dispatch => {
+    return getDecks().then(decks => {
+      dispatch(receiveDecks(decks));
+    });
+  };
+}
+
 export function addDeck(title) {
   return {
     type: ADD_DECK,
@@ -26,10 +34,4 @@ export function removeDeck(id) {
   };
 }
 
-export function handleInitialData() {
-  return dispatch => {
-    return getDecks().then(decks => {
-      dispatch(receiveDecks(decks));
-    });
-  };
-}
+

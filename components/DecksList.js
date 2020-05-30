@@ -11,7 +11,6 @@ class DeckList extends React.Component {
   }
   render(){
     const { decks, navigation } = this.props;
-
     return(
       <ScrollView>
         { Object.values(decks).map((deck) => {
@@ -49,6 +48,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = state => ({ decks: state });
+const mapStateToProps = (state) => {
+  return {
+    decks: state 
+  };
+};
 
 export default connect(mapStateToProps, { handleInitialData })(DeckList);

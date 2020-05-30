@@ -4,11 +4,11 @@ import { purple } from '../utils/colors';
 import { connect } from 'react-redux';
 
 const Deck = props => {
-    const { deck } = props;
+    const { title, numberOfCards } = props;
     return (  
         <View>
-            <Text style={styles.title}>{deck.title}</Text>
-            <Text style={styles.number}>{deck.questions.length} cards</Text>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.number}>{numberOfCards} cards</Text>
         </View> 
     );
 };
@@ -25,10 +25,13 @@ const styles = StyleSheet.create({
   });
 
 
-const mapStateToProps = (state, { id, }) => {
+const mapStateToProps = (state, { id }) => {
     const deck = state[id];
+    const title = deck.title;
+    const numberOfCards = deck.questions.length
     return {
-        deck
+        title, 
+        numberOfCards
     };
 };
 

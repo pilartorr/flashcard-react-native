@@ -20,12 +20,15 @@ export default function decks(state = {}, action) {
           questions: []
         }
       };
-    case REMOVE_DECK:
+    case REMOVE_DECK: {
       const { id } = action;
-        const { [id]: value, ...remainingDecks } = state;
-        return remainingDecks;
+      const decks = Object.keys(state)
+      return {
+        ...state,
+        [id]: decks.filter(deck => deck.id !== action.id)
+      }
+    }
     default:
       return state;
   }
 }
-
