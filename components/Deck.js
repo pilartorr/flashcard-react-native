@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 const Deck = props => {
     const { title, numberOfCards } = props;
     return (  
-        <View>
+        <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.number}>{numberOfCards} cards</Text>
         </View> 
@@ -14,6 +14,21 @@ const Deck = props => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        backgroundColor: "white",
+        padding: 40,
+        width: 1000,
+        shadowRadius: 3,
+        shadowOpacity: 0.8,
+        shadowColor: "rgba(0,0,0,0.24)",
+        shadowOffset: {
+          width: 0,
+          height: 3
+        },
+    },
     title: {
         fontSize: 40,
         color: purple,

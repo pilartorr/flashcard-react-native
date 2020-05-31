@@ -62,15 +62,13 @@ class AddCard extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    container: { 
         flex: 1,
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",
         borderRadius: Platform.OS === "ios" ? 8 : 2,
         padding: 40,
-        marginLeft: 10,
-        marginRight: 10,
         shadowRadius: 3,
         shadowOpacity: 0.8,
         shadowColor: "rgba(0,0,0,0.24)",
@@ -94,6 +92,7 @@ const styles = StyleSheet.create({
     textInput: {
         borderBottomWidth: 2,
         borderBottomColor: purple,
+        paddingTop: 50,
         paddingBottom: 10,
         width: "100%",
         fontSize: 17,

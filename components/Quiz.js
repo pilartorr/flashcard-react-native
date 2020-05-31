@@ -1,13 +1,25 @@
 import * as React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
-import { white } from '../utils/colors';
+import { white, blue, red, green, purple } from '../utils/colors';
 
 class Quiz extends React.Component {
   render(){
     return(
         <View style={styles.container}>
-          <Text>Quiz</Text>
+          <Text style={styles.numberOfQuestions}>2/2</Text>
+          <View>
+            <Text style={styles.heading}>What is the Question?</Text>
+            <TouchableOpacity><Text style={styles.switchBtn}>Answer</Text></TouchableOpacity>
+          </View>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity>
+              <Text style={[styles.btn, styles.correct]}>Correct</Text>
+            </TouchableOpacity> 
+            <TouchableOpacity>
+              <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
+            </TouchableOpacity> 
+          </View>
         </View>
     )   
   }  
@@ -15,13 +27,12 @@ class Quiz extends React.Component {
 
 const styles = StyleSheet.create({
   container: { 
+    flex: 1,
+    justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: white,
-    borderRadius: 2,
-    padding: 10,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 17,
+    backgroundColor: "white",
+    borderRadius: Platform.OS === "ios" ? 8 : 2,
+    padding: 40,
     shadowRadius: 3,
     shadowOpacity: 0.8,
     shadowColor: "rgba(0,0,0,0.24)",
@@ -29,9 +40,48 @@ const styles = StyleSheet.create({
       width: 0,
       height: 3
     },
-    height: 150,
-    justifyContent: "center"
-  }
+  },
+  numberOfQuestions: {
+    alignSelf: "flex-end",
+    padding: 5,
+    marginBottom: 5,
+    color: purple,
+    fontWeight: "bold"
+  },
+  heading: { 
+    fontSize: 40,
+    textAlign: 'center',
+    color: purple,
+    fontWeight: "bold",
+    marginTop: 100
+  },
+  switchBtn: {
+    marginTop: 20,
+    color: red,
+    fontWeight: "bold",
+    fontSize: 22,
+    textAlign: 'center',
+  },
+  btnContainer: {
+    marginTop: 150
+  },
+  btn: {
+    backgroundColor: blue,
+    color: white,  
+    fontSize: 17,
+    textAlign: 'center',
+    padding: 10,
+    margin: 5,
+    borderRadius: 2,
+    height: 45,
+    width: 100
+},
+correct: {
+    backgroundColor: green
+},
+incorrect: {
+    backgroundColor: red
+}
 });
 
 export default connect()(Quiz);

@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start",
         alignItems: "center",
+        backgroundColor: "white",
+        padding: 40,
     },
     btn: {
         backgroundColor: blue,
