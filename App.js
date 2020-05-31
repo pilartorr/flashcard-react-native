@@ -7,6 +7,8 @@ import DecksList from './components/DecksList'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
 import Deck from './components/Deck'
+import AddCard from './components/AddCard'
+import Quiz from './components/Quiz'
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -62,6 +64,14 @@ const MainNav = () => (
     <Stack.Screen
       name="DeckDetail"
       component={DeckDetail}
+      options={{headerShown: false}}/>
+    <Stack.Screen
+      name="AddCard"
+      component={AddCard}
+      options={{headerShown: false}}/>
+    <Stack.Screen
+      name="Quiz"
+      component={Quiz}
       options={{headerShown: false}}/>
   </Stack.Navigator>
 );

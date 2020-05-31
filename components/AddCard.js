@@ -1,32 +1,34 @@
 import React, { Component} from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native'
 import { purple, blue, white } from '../utils/colors';
+import { addCard } from '../actions/index';
+import { addCardAPI } from '../utils/api';
+import { connect } from 'react-redux'
 
 class AddCard extends Component {
     state = {
         question: "",
         answer: "",
     };
-    handleQuestion = (value) => {
-        this.setState({
-            question: value
-        })
+    handleQuestion = (question) => {
+        this.setState({ question })
     }
-    handleAnswer = (value) => {
-        this.setState({
-            answer: value
-        })
+    handleAnswer = (answer) => {
+        this.setState({ answer })
     }
     handleSubmit = (e) => {
         e.preventDefault()
 
         const { question, answer } = this.state
+        const { addCard } = this.props;
 
-        this.props.addCard(question, answer)
+        addCard(question, answer)
+        addCardAPI(question, answer)
 
-        saveCard(question, answer)
+        this.setState({ question: '', answer: '' });
         this.toHome();
     }
+
     toHome = () => {
         this.props.navigation.dispatch(
             CommonActions.goBack({
@@ -58,8 +60,6 @@ class AddCard extends Component {
         )
     }
 }
-
-export default AddCard
 
 const styles = StyleSheet.create({
     container: {
@@ -108,4 +108,7 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         height: 45
       }
-  });
+});
+
+export default connect(null, { addCard })(AddCard);
+

@@ -1,7 +1,8 @@
 import {
   RECEIVE_DECKS,
   ADD_DECK,
-  REMOVE_DECK
+  REMOVE_DECK,
+  ADD_CARD
 } from '../actions/index';
 
 export default function decks(state = {}, action) {
@@ -27,6 +28,15 @@ export default function decks(state = {}, action) {
         ...state,
         [id]: decks.filter(deck => deck.id !== action.id)
       }
+    }
+    case ADD_CARD:
+      const { id, card } = action;
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          questions: [...state[id].questions].concat(card)
+        }
     }
     default:
       return state;

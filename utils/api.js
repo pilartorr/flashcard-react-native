@@ -3,18 +3,6 @@ import { decks } from './_DATA';
 
 const DECKS_STORAGE_KEY = 'Flashcards:decks';
 
-export function getData() {
-  return decks;
-}
-
-function formatDeckResults(results) {
-  return results === null ? decks : JSON.parse(results);
-}
-
-export function getDecksOld() {
-  return AsyncStorage.getItem(DECKS_STORAGE_KEY).then(formatDeckResults);
-}
-
 export async function getDecks() {
   try {
     const storeResults = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
@@ -36,7 +24,7 @@ export async function getDeck(id) {
   }
 }
 
-export async function saveDeck(title) {
+export async function saveDeckAPI(title) {
   try {
     await AsyncStorage.mergeItem( DECKS_STORAGE_KEY, JSON.stringify({
         [title]: {
@@ -59,6 +47,23 @@ export async function removeDeckAPI (key) {
       delete data[key]
       AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data))
     })
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function addCardToDeck(title, card) {
+  try {
+    const deck = await getDeck(title);
+
+    await AsyncStorage.mergeItem(
+      DECKS_STORAGE_KEY,
+      JSON.stringify({
+        [title]: {
+          questions: [...deck.questions].concat(card)
+        }
+      })
+    );
   } catch (err) {
     console.log(err);
   }

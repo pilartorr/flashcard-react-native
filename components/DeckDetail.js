@@ -20,14 +20,14 @@ class DeckDetail extends React.Component {
         navigation.goBack();
     }
     render() {
-        const { deck } = this.props;
+        const { deck, navigation } = this.props;
         return (
             <View style={styles.container}>
                 <Deck id={deck.title} />
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('AddCard', { title: deck.title })}>
                     <Text style={styles.btn}>Add Card</Text>
                 </TouchableOpacity> 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Quiz', { title: deck.title })}>
                     <Text style={[styles.btn, styles.start]}>Start Quiz</Text>
                 </TouchableOpacity> 
                 <TouchableOpacity onPress={() => this.handleDelete()}>

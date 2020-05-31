@@ -4,7 +4,7 @@ import { purple, blue, white } from '../utils/colors';
 import { connect } from 'react-redux'
 import { CommonActions } from '@react-navigation/native';
 import { addDeck } from '../actions/index';
-import { saveDeck } from '../utils/api';
+import { saveDeckAPI } from '../utils/api';
 
 class AddDeck extends Component {
     state = {
@@ -19,7 +19,7 @@ class AddDeck extends Component {
         const { title } = this.state
 
         this.props.addDeck(title);
-        saveDeck(title)
+        saveDeckAPI(title)
         
         this.toHome();
         this.setState({
