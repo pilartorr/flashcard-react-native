@@ -5,7 +5,11 @@ import {
   ADD_CARD
 } from '../actions/index';
 
-export default function decks(state = {}, action) {
+import { initialData } from '../utils/_DATA';
+
+const initialState = initialData;
+
+export default function decks(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_DECKS:
       return {

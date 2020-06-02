@@ -1,40 +1,48 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Button } from 'react-native';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
 
 class Quiz extends React.Component {
   state = {
     questions: [],
-    totalOfQuestions: 0,
     answeredQuestions: 0,
-    correctAnswers: 0,
+    correctAnswer: 0,
+    incorrectAnswer: 0
   }
   componentDidMount = () => {
     const { deck } = this.props
-    console.log(deck)
     this.setState({
         ...this.state,
         questions: deck.questions
     });
   }
+
   render(){
+    const { questions, answeredQuestions } = this.state;
     return(
-        <View style={styles.container}>
-          <Text style={styles.numberOfQuestions}>2/2</Text>
-          <View>
-            <Text style={styles.heading}>What is the Question?</Text>
-            <TouchableOpacity><Text style={styles.switchBtn}>Answer</Text></TouchableOpacity>
-          </View>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity>
-              <Text style={[styles.btn, styles.correct]}>Correct</Text>
-            </TouchableOpacity> 
-            <TouchableOpacity>
-              <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
-            </TouchableOpacity> 
-          </View>
-        </View>
+      <View style={styles.container}>
+        { questions.map((question) => {
+          const totalQuestions = questions.length
+          return(
+            <View>
+              <Text style={styles.numberOfQuestions}>{answeredQuestions}/{totalQuestions}</Text>
+              <View>
+                <Text style={styles.heading}>{question.question}</Text>
+                <TouchableOpacity><Text style={styles.switchBtn}>Answer</Text></TouchableOpacity>
+              </View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity>
+                  <Text style={[styles.btn, styles.correct]}>Correct</Text>
+                </TouchableOpacity> 
+                <TouchableOpacity>
+                  <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
+                </TouchableOpacity> 
+              </View>
+            </View>
+          )
+        })}
+      </View>
     )   
   }  
 }
@@ -100,10 +108,7 @@ incorrect: {
 
 const mapStateToProps = (state, {route}) => {
   const title = route.params.title;
-  //console.log(title)
   const deck = state[title];
-  console.log(deck)
-
   return {
     deck,
   };

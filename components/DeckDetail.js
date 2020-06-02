@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     }
 })
 
-
 const mapStateToProps = (state, {route}) => {
     const title = route.params.title;
     //console.log(title)
