@@ -54,16 +54,18 @@ export async function removeDeckAPI (key) {
 
 export async function addCardAPI(deckId, card) {
   try {
-    const deck = await getDeck(deckId);
+    //const deck = await getDeck(deckId);
 
-    await AsyncStorage.mergeItem(
-      DECKS_STORAGE_KEY,
-      JSON.stringify({
-        [deckId]: {
-          questions: [...deck.questions].concat(card)
+    await AsyncStorage.getItem(DECKS_STORAGE_KEY)
+    .then(results => {
+      const data = JSON.parse(results);
+      Object.keys(data).map(id => {
+        if (id === deckId) {
+          data[id].questions.push(card);
         }
-      })
-    );
+      });
+      AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
+    });
   } catch (err) {
     console.log(err);
   }
