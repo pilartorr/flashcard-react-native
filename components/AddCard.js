@@ -1,6 +1,7 @@
 import React, { Component} from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native'
 import { purple, blue, white } from '../utils/colors';
+import { CommonActions } from '@react-navigation/native';
 import { addCard } from '../actions/index';
 import { addCardAPI } from '../utils/api';
 import { connect } from 'react-redux'
@@ -16,19 +17,20 @@ class AddCard extends Component {
     handleAnswer = (answer) => {
         this.setState({ answer })
     }
-    handleSubmit = (e) => {
-        e.preventDefault()
+    handleSubmit = () => {
+        const { addCard, deckId } = this.props;
 
-        const { question, answer } = this.state
-        const { addCard } = this.props;
-
-        addCard(question, answer)
-        addCardAPI(question, answer)
-
+        const card = {
+          question: this.state.question,
+          answer: this.state.answer
+        };
+    
+        addCard(deckId, card);
+        addCardAPI(deckId, card);
+    
         this.setState({ question: '', answer: '' });
         this.toHome();
-    }
-
+    };
     toHome = () => {
         this.props.navigation.dispatch(
             CommonActions.goBack({
@@ -109,5 +111,14 @@ const styles = StyleSheet.create({
       }
 });
 
-export default connect(null, { addCard })(AddCard);
+const mapStateToProps = (state, {route}) => {
+    const deckId = route.params.title;
+    console.log('deckId: ', deckId)
+    return {
+        deckId,
+    };
+  };
+  
+  
+export default connect(mapStateToProps, { addCard })(AddCard);
 
