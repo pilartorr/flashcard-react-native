@@ -6,9 +6,10 @@ import { white, blue, red, green, purple } from '../utils/colors';
 class Quiz extends React.Component {
   state = {
     questions: [],
-    answeredQuestions: 0,
-    correctAnswer: 0,
-    incorrectAnswer: 0
+    totalOfQuestions: this.props.deck.questions.length,
+    correctAnswers: 0,
+    incorrectAnswers: 0,
+    showQuestion: true,
   }
   componentDidMount = () => {
     const { deck } = this.props
@@ -17,28 +18,41 @@ class Quiz extends React.Component {
         questions: deck.questions
     });
   }
-
+  handlePageChange = () => {
+    this.setState(prevState => ({
+      showQuestion: !prevState.showQuestion
+    }));
+  };
+  
   render(){
-    const { questions, answeredQuestions } = this.state;
+    const { questions, totalOfQuestions, showQuestion } = this.state;
     return(
       <View style={styles.container}>
-        { questions.map((question) => {
-          const totalQuestions = questions.length
+        { questions.map((question, idx) => {
           return(
             <View>
-              <Text style={styles.numberOfQuestions}>{answeredQuestions}/{totalQuestions}</Text>
+              <Text style={styles.numberOfQuestions}>{idx + 1}/{totalOfQuestions}</Text>
               <View>
-                <Text style={styles.heading}>{question.question}</Text>
-                <TouchableOpacity><Text style={styles.switchBtn}>Answer</Text></TouchableOpacity>
+                <Text style={[ showQuestion ? styles.question : styles.answer ]}>
+                  {showQuestion
+                    ? question.question
+                    : question.answer}
+                </Text>
+                <TouchableOpacity  onPress={this.handlePageChange}>  
+                  <Text style={styles.switchBtn}>{showQuestion ? 'Answer' : 'Question'}</Text>
+                </TouchableOpacity>
               </View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity>
-                  <Text style={[styles.btn, styles.correct]}>Correct</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity>
-                  <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
-                </TouchableOpacity> 
-              </View>
+              {showQuestion
+                ?  
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity>
+                      <Text style={[styles.btn, styles.correct]}>Correct</Text>
+                    </TouchableOpacity> 
+                    <TouchableOpacity>
+                      <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
+                    </TouchableOpacity> 
+                  </View>
+                : null }      
             </View>
           )
         })}
@@ -70,18 +84,26 @@ const styles = StyleSheet.create({
     color: purple,
     fontWeight: "bold"
   },
-  heading: { 
+  question: { 
     fontSize: 40,
     textAlign: 'center',
     color: purple,
     fontWeight: "bold",
     marginTop: 100
   },
+  answer:{
+    fontSize: 20,
+    textAlign: 'left',
+    color: purple,
+    fontWeight: "bold",
+    marginTop: 100,
+    fontStyle: 'italic'
+  },
   switchBtn: {
     marginTop: 20,
     color: red,
     fontWeight: "bold",
-    fontSize: 22,
+    fontSize: 20,
     textAlign: 'center',
   },
   btnContainer: {

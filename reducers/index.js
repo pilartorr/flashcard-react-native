@@ -25,23 +25,26 @@ export default function decks(state = initialState, action) {
           questions: []
         }
       };
-    case REMOVE_DECK: {
+    case REMOVE_DECK:
       const { id } = action;
-      const decks = Object.keys(state)
-      return {
-        ...state,
-        [id]: decks.filter(deck => deck.id !== action.id)
-      }
-    }
-    case ADD_CARD:
-      const { id, card } = action;
-      return {
-        ...state,
-        [id]: {
-          ...state[id],
-          questions: [...state[id].questions].concat(card)
+      return Object.keys(state).reduce((newSt, titleKey) => {
+        if (titleKey !== id) {
+          return {
+            ...newSt,
+            [titleKey]: state[titleKey]
+          };
         }
-    }
+        return newSt;
+      }, {});
+    case ADD_CARD:
+      const { deckId, card } = action;
+      return {
+        ...state,
+        [deckId]: {
+          ...state[deckId],
+          questions: [...state[deckId].questions].concat(card)
+        }
+      };
     default:
       return state;
   }

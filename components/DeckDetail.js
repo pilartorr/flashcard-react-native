@@ -12,7 +12,7 @@ class DeckDetail extends React.Component {
         const { removeDeck, navigation, deck } = this.props;  
 
         const id = deck.title
-        //console.log(id)
+        console.log('deckDetail: ', id)
 
         removeDeck(id);
         removeDeckAPI(id);
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, {route}) => {
     const title = route.params.title;
-    //console.log(title)
+    console.log('title-deckDetail: ', title)
     const deck = state[title];
     console.log(deck)
 

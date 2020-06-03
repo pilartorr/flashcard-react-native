@@ -52,14 +52,14 @@ export async function removeDeckAPI (key) {
   }
 }
 
-export async function addCardToDeck(title, card) {
+export async function addCardToDeck(deckId, card) {
   try {
-    const deck = await getDeck(title);
+    const deck = await getDeck(deckId);
 
     await AsyncStorage.mergeItem(
       DECKS_STORAGE_KEY,
       JSON.stringify({
-        [title]: {
+        [deckId]: {
           questions: [...deck.questions].concat(card)
         }
       })
