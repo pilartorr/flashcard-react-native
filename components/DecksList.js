@@ -14,7 +14,6 @@ class DeckList extends React.Component {
     return(
       <ScrollView>
         { Object.values(decks).map((deck) => {
-          console.log('deck-list: ', deck)
           return ( 
             <View style={styles.container} key={deck.title}> 
               <TouchableOpacity onPress={() => navigation.navigate('DeckDetail', { title: deck.title })}> 

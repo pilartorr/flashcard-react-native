@@ -52,7 +52,7 @@ export async function removeDeckAPI (key) {
   }
 }
 
-export async function addCardToDeck(deckId, card) {
+export async function addCardAPI(deckId, card) {
   try {
     const deck = await getDeck(deckId);
 
@@ -68,3 +68,4 @@ export async function addCardToDeck(deckId, card) {
     console.log(err);
   }
 }
+

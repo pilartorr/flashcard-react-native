@@ -25,17 +25,12 @@ export default function decks(state = initialState, action) {
           questions: []
         }
       };
-    case REMOVE_DECK:
+    case REMOVE_DECK: 
       const { id } = action;
-      return Object.keys(state).reduce((newSt, titleKey) => {
-        if (titleKey !== id) {
-          return {
-            ...newSt,
-            [titleKey]: state[titleKey]
-          };
-        }
-        return newSt;
-      }, {});
+      const newState = Object.assign({}, state)
+      newState[id] = undefined
+      delete newState[id]
+      return newState
     case ADD_CARD:
       const { deckId, card } = action;
       return {

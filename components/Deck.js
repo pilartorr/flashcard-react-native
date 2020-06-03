@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, { id }) => {
     const deck = state[id];
-    console.log('deck:', deck)
     const title = deck.title;
     const numberOfCards = deck.questions.length
     return {

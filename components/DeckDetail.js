@@ -10,9 +10,7 @@ import { removeDeckAPI } from '../utils/api';
 class DeckDetail extends React.Component {
     handleDelete = () => {
         const { removeDeck, navigation, deck } = this.props;  
-
         const id = deck.title
-        console.log('deckDetail: ', id)
 
         removeDeck(id);
         removeDeckAPI(id);
@@ -21,6 +19,7 @@ class DeckDetail extends React.Component {
     }
     render() {
         const { deck, navigation } = this.props;
+        if(!deck) return (<Text>Deck Not Found!</Text>)
         return (
             <View style={styles.container}>
                 <Deck id={deck.title} />
@@ -67,10 +66,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, {route}) => {
     const title = route.params.title;
-    console.log('title-deckDetail: ', title)
     const deck = state[title];
-    console.log(deck)
-
     return {
       deck,
     };
