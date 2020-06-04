@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-//import ViewPager from '@react-native-community/viewpager';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
 
@@ -100,7 +99,7 @@ class Quiz extends React.Component {
     }
  
     return(
-      <View scrollEnabled={true} onPageSelected={this.handlePageChange} ref={viewPager => {this.viewPager = viewPager;}}>
+      <View>
         { questions.map((question, idx) => {
           return(
             <View key={idx}>
