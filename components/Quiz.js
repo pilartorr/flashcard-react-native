@@ -1,15 +1,27 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Button } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+//import ViewPager from '@react-native-community/viewpager';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
+
+const screen = {
+  QUESTION: 'question',
+  ANSWER: 'answer',
+  RESULT: 'result'
+};
+const answer = {
+  CORRECT: 'correct',
+  INCORRECT: 'incorrect'
+};
 
 class Quiz extends React.Component {
   state = {
     questions: [],
     totalOfQuestions: this.props.deck.questions.length,
-    correctAnswers: 0,
-    incorrectAnswers: 0,
-    showQuestion: true,
+    correctAnswer: 0,
+    incorrectAnswer: 0,
+    answeredCards: 0,
+    showScreen: screen.QUESTION,
   }
   componentDidMount = () => {
     const { deck } = this.props
@@ -19,67 +31,125 @@ class Quiz extends React.Component {
     });
   }
   handlePageChange = () => {
-    this.setState(prevState => ({
-      showQuestion: !prevState.showQuestion
-    }));
+    this.setState({
+      showScreen: screen.QUESTION
+    });
   };
-  
+  handleAnswer = (response, page) => {
+    if (response === answer.CORRECT) {
+      this.setState({ correctAnswer: this.state.correctAnswer + 1 });
+    } else {
+      this.setState({ incorrectAnswer: this.state.incorrectAnswer + 1 });
+    }
+   
+    const { correctAnswer, incorrectAnswer, totalOfQuestions } = this.state;
+
+    if (totalOfQuestions === correctAnswer + incorrectAnswer) {
+      this.setState({ showScreen: screen.RESULT });
+    } else {
+      this.setState({showScreen: screen.QUESTION});
+    }
+
+  };
+  handleReset = () => {
+    this.setState({
+      showScreen: screen.QUESTION,
+      correctAnswer: 0,
+      incorrectAnswer: 0,
+      answeredCards: 0
+    });
+  };
   render(){
-    const { questions, totalOfQuestions, showQuestion } = this.state;
+    const { questions, showScreen } = this.state;
+
+    if (questions.length === 0) {
+      return (
+        <View style={styles.block}>
+          <Text>You cannot take a quiz because there are no cards in the deck.</Text>
+          <Text>Please add some cards and try again.</Text>
+        </View>
+      );
+    }
+
+    if (this.state.show === screen.RESULT) {
+      const { correctAnswer, totalOfQuestions } = this.state;
+      const percent = ((correctAnswer / totalOfQuestions) * 100).toFixed(0);
+      return(
+        <View style={styles.block}>
+          <View>
+            <Text style={styles.headingBlock}>Quiz Complete!</Text>
+            <Text style={[styles.textBlock, styles.textRed]}>{correctAnswer} / {totalOfQuestions} correct</Text>
+          </View>
+          <View>
+            <Text style={styles.textBlock, styles.percent}>Percentage correct</Text>
+            <Text style={[styles.textBlock, styles.textRed]}>{percent}%</Text>
+          </View>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity onPress={this.handleReset}>
+              <Text style={[styles.btn, styles.btnRed]}>Restart Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { this.handleReset(); this.props.navigation.goBack(); }}>
+              <Text style={[styles.btn, styles.btnGreen]}>Go Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { this.handleReset(); this.props.navigation.navigate('Home'); }}>
+              <Text style={[styles.btn, styles.btnPurple]}>Home</Text>
+            </TouchableOpacity>
+          </View>        
+        </View>
+      )
+    }
+ 
     return(
-      <View style={styles.container}>
+      <View scrollEnabled={true} onPageSelected={this.handlePageChange} ref={viewPager => {this.viewPager = viewPager;}}>
         { questions.map((question, idx) => {
           return(
-            <View>
-              <Text style={styles.numberOfQuestions}>{idx + 1}/{totalOfQuestions}</Text>
+            <View key={idx}>
+              <Text style={styles.numberOfQuestions}>{idx + 1}/{this.state.totalOfQuestions}</Text>
               <View>
-                <Text style={[ showQuestion ? styles.question : styles.answer ]}>
-                  {showQuestion
+                <Text style={[ showScreen === screen.QUESTION ? styles.question : styles.answer ]}>
+                  { showScreen === screen.QUESTION
                     ? question.question
-                    : question.answer}
+                    : question.answer }
                 </Text>
-                <TouchableOpacity  onPress={this.handlePageChange}>  
-                  <Text style={styles.switchBtn}>{showQuestion ? 'Answer' : 'Question'}</Text>
-                </TouchableOpacity>
+
+                { showScreen === screen.QUESTION ? (
+                  <TouchableOpacity  onPress={() => this.setState({ showScreen: screen.ANSWER })}>  
+                    <Text style={styles.switchBtn}>Answer</Text>
+                  </TouchableOpacity>
+                ):(
+                  <TouchableOpacity  onPress={() => this.setState({ showScreen: screen.QUESTION })}>  
+                    <Text style={styles.switchBtn}>Question</Text>
+                  </TouchableOpacity>
+                )}       
               </View>  
+
               <View style={styles.btnContainer}>
-                <TouchableOpacity>
-                  <Text style={[styles.btn, styles.correct]}>Correct</Text>
+                <TouchableOpacity onPress={() => this.handleAnswer(answer.CORRECT, idx)}>
+                  <Text style={[styles.btn, styles.btnGreen]}>Correct</Text>
                 </TouchableOpacity> 
-                <TouchableOpacity>
-                  <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
+                <TouchableOpacity onPress={() => this.handleAnswer(answer.INCORRECT, idx)}>
+                  <Text style={[styles.btn, styles.btnRed]}>Incorrect</Text>
                 </TouchableOpacity> 
               </View>
-            </View>
+            </View>           
           )
         })}
+
       </View>
     )   
   }  
 }
 
 const styles = StyleSheet.create({
-  container: { 
+  container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: Platform.OS === "ios" ? 8 : 2,
-    padding: 40,
-    shadowRadius: 3,
-    shadowOpacity: 0.8,
-    shadowColor: "rgba(0,0,0,0.24)",
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
+    padding: 16,
+    justifyContent: 'space-around'
   },
   numberOfQuestions: {
-    alignSelf: "flex-end",
-    padding: 5,
-    marginBottom: 5,
     color: purple,
-    fontWeight: "bold"
+    fontWeight: "bold", 
+    padding: 10
   },
   question: { 
     fontSize: 40,
@@ -93,7 +163,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: purple,
     fontWeight: "bold",
-    marginTop: 100,
     fontStyle: 'italic'
   },
   switchBtn: {
@@ -104,7 +173,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btnContainer: {
-    marginTop: 270,
+    marginTop: 20,
     alignItems: "center",
   },
   btn: {
@@ -117,13 +186,43 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 45,
     width: 100
-},
-correct: {
-    backgroundColor: green
-},
-incorrect: {
-    backgroundColor: red
-}
+  },
+  btnGreen: {
+      backgroundColor: green
+  },
+  btnRed: {
+      backgroundColor: red
+  },
+  btnBlue: {
+    backgroundColor: blue
+  },
+  btnPurple: {
+    backgroundColor: purple
+  },
+  block: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headingBlock: {
+    fontSize: 40,
+    textAlign: 'center',
+    color: green,
+    fontWeight: "bold",
+  },
+  textBlock: {
+    fontSize: 20,
+    textAlign: 'center',
+    padding: 10,
+    fontWeight: "bold"
+  },
+  percent: {
+    fontSize: 25,
+    paddingTop: 20
+  },
+  textRed: {
+    color: red
+  }, 
 });
 
 const mapStateToProps = (state, {route}) => {
