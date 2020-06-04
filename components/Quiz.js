@@ -41,18 +41,15 @@ class Quiz extends React.Component {
                 <TouchableOpacity  onPress={this.handlePageChange}>  
                   <Text style={styles.switchBtn}>{showQuestion ? 'Answer' : 'Question'}</Text>
                 </TouchableOpacity>
+              </View>  
+              <View style={styles.btnContainer}>
+                <TouchableOpacity>
+                  <Text style={[styles.btn, styles.correct]}>Correct</Text>
+                </TouchableOpacity> 
+                <TouchableOpacity>
+                  <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
+                </TouchableOpacity> 
               </View>
-              {showQuestion
-                ?  
-                  <View style={styles.btnContainer}>
-                    <TouchableOpacity>
-                      <Text style={[styles.btn, styles.correct]}>Correct</Text>
-                    </TouchableOpacity> 
-                    <TouchableOpacity>
-                      <Text style={[styles.btn, styles.incorrect]}>Incorrect</Text>
-                    </TouchableOpacity> 
-                  </View>
-                : null }      
             </View>
           )
         })}
@@ -93,7 +90,7 @@ const styles = StyleSheet.create({
   },
   answer:{
     fontSize: 20,
-    textAlign: 'left',
+    textAlign: 'center',
     color: purple,
     fontWeight: "bold",
     marginTop: 100,
@@ -107,7 +104,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btnContainer: {
-    marginTop: 150
+    marginTop: 270,
+    alignItems: "center",
   },
   btn: {
     backgroundColor: blue,
