@@ -2,7 +2,6 @@ import React, { Component} from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native'
 import { purple, blue, white } from '../utils/colors';
 import { connect } from 'react-redux'
-import { CommonActions } from '@react-navigation/native';
 import { addDeck } from '../actions/index';
 import { saveDeckAPI } from '../utils/api';
 
@@ -21,18 +20,13 @@ class AddDeck extends Component {
         this.props.addDeck(title);
         saveDeckAPI(title)
         
-        this.toHome();
+        this.props.navigation.navigate('DeckDetail',{ title: title })
+        
         this.setState({
             title: ''
         })
     }
-    
-    toHome = () => {
-        this.props.navigation.dispatch(
-            CommonActions.goBack({
-                key: 'DecksList',
-            }))
-    }
+
     render(){
         return (
             <View style={styles.container}>
@@ -46,7 +40,7 @@ class AddDeck extends Component {
                     />
                 </View>
                 <TouchableOpacity onPress={this.handleSubmit}>
-                    <Text style={styles.submitBtn}>Add title</Text>
+                    <Text style={styles.submitBtn}>Create Deck</Text>
                 </TouchableOpacity>
             </View>
         )
