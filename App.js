@@ -6,7 +6,6 @@ import Constants from "expo-constants";
 import DecksList from './components/DecksList'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
-import Deck from './components/Deck'
 import AddCard from './components/AddCard'
 import Quiz from './components/Quiz'
 
@@ -20,6 +19,7 @@ import rootReducer from './reducers/index'
 import middleware from './middleware/index'
 
 import { purple, white } from './utils/colors'
+import { setLocalNotification } from './utils/helpers'
 
 function AppStatusBar({ backgroundColor, ...props }) {
   return (
@@ -77,6 +77,9 @@ const MainNav = () => (
 );
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
   render() {
     return (
       <Provider store={createStore(rootReducer, middleware)}>

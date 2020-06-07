@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
-import { setLocalNotification, clearLocalNotification } from '../utils/helpers';
 
 
 const screen = {
@@ -25,13 +24,10 @@ class Quiz extends React.Component {
     showScreen: screen.QUESTION,
   }
   componentDidMount = () => {
-    const { deck } = this.props
     this.setState({
         ...this.state,
-        questions: deck.questions
+        questions: this.props.deck.questions
     });
-    
-    //clearLocalNotification().then(setLocalNotification);
   }
   handlePageChange = () => {
     this.setState({

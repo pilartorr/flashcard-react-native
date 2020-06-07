@@ -26,6 +26,7 @@ class AddDeck extends Component {
             title: ''
         })
     }
+    
     toHome = () => {
         this.props.navigation.dispatch(
             CommonActions.goBack({
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",
-        borderRadius: Platform.OS === "ios" ? 8 : 2,
+        borderRadius: 2,
         padding: 40,
         marginLeft: 10,
         marginRight: 10,
