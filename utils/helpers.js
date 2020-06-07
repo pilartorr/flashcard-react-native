@@ -18,6 +18,9 @@ function createNotification () {
     return {
       title: 'Do some trainging today!',
       body: "👋 don't forget to exercise with some cards today!",
+      ios: {
+        sound: true,
+      },
       android: {
         sound: true,
         priority: 'high',

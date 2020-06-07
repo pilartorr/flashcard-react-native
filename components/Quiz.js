@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
+import { setLocalNotification, clearLocalNotification } from '../utils/helpers';
+
 
 const screen = {
   QUESTION: 'question',
@@ -17,9 +19,9 @@ class Quiz extends React.Component {
   state = {
     questions: [],
     totalOfQuestions: this.props.deck.questions.length,
+    index: 0,
     correctAnswer: 0,
     incorrectAnswer: 0,
-    answeredCards: 0,
     showScreen: screen.QUESTION,
   }
   componentDidMount = () => {
@@ -28,22 +30,32 @@ class Quiz extends React.Component {
         ...this.state,
         questions: deck.questions
     });
+    
+    //clearLocalNotification().then(setLocalNotification);
   }
   handlePageChange = () => {
     this.setState({
       showScreen: screen.QUESTION
     });
   };
-  handleAnswer = (response, page) => {
+  handleAnswer = (response) => {
+    const { index, totalOfQuestions } = this.state;
+    console.log('index: ', index)
+    console.log('totalQ: ', totalOfQuestions)
+
     if (response === answer.CORRECT) {
-      this.setState({ correctAnswer: this.state.correctAnswer + 1 });
+      this.setState({ 
+        correctAnswer: this.state.correctAnswer + 1,
+        index: this.state.index + 1,
+      });
     } else {
-      this.setState({ incorrectAnswer: this.state.incorrectAnswer + 1 });
+      this.setState({ 
+        incorrectAnswer: this.state.incorrectAnswer + 1,
+        index: this.state.index + 1,
+      });
     }
    
-    const { correctAnswer, incorrectAnswer, totalOfQuestions } = this.state;
-
-    if (totalOfQuestions === correctAnswer + incorrectAnswer) {
+    if (index === totalOfQuestions) {
       this.setState({ showScreen: screen.RESULT });
     } else {
       this.setState({showScreen: screen.QUESTION});
@@ -55,11 +67,12 @@ class Quiz extends React.Component {
       showScreen: screen.QUESTION,
       correctAnswer: 0,
       incorrectAnswer: 0,
-      answeredCards: 0
+      answeredCards: 0,
+      indexQuestion:0
     });
   };
   render(){
-    const { questions, showScreen } = this.state;
+    const { questions, showScreen, index, correctAnswer, totalOfQuestions} = this.state;
 
     if (questions.length === 0) {
       return (
@@ -70,8 +83,7 @@ class Quiz extends React.Component {
       );
     }
 
-    if (this.state.show === screen.RESULT) {
-      const { correctAnswer, totalOfQuestions } = this.state;
+    if (this.state.showScreen === screen.RESULT) {
       const percent = ((correctAnswer / totalOfQuestions) * 100).toFixed(0);
       return(
         <View style={styles.block}>
@@ -98,43 +110,36 @@ class Quiz extends React.Component {
       )
     }
  
-    return(
-      <View>
-        { questions.map((question, idx) => {
-          return(
-            <View key={idx}>
-              <Text style={styles.numberOfQuestions}>{idx + 1}/{this.state.totalOfQuestions}</Text>
-              <View>
-                <Text style={[ showScreen === screen.QUESTION ? styles.question : styles.answer ]}>
-                  { showScreen === screen.QUESTION
-                    ? question.question
-                    : question.answer }
-                </Text>
+    return(    
+      <View key={index}>
+        <Text style={styles.numberOfQuestions}>{index + 1}/{this.state.totalOfQuestions}</Text>
+        <View>
+          <Text style={styles.heading}>
+            { showScreen === screen.QUESTION
+              ? questions[index].question
+              : questions[index].answer }
+          </Text>
 
-                { showScreen === screen.QUESTION ? (
-                  <TouchableOpacity  onPress={() => this.setState({ showScreen: screen.ANSWER })}>  
-                    <Text style={styles.switchBtn}>Answer</Text>
-                  </TouchableOpacity>
-                ):(
-                  <TouchableOpacity  onPress={() => this.setState({ showScreen: screen.QUESTION })}>  
-                    <Text style={styles.switchBtn}>Question</Text>
-                  </TouchableOpacity>
-                )}       
-              </View>  
+          { showScreen === screen.QUESTION ? (
+            <TouchableOpacity  onPress={() => this.setState({ showScreen: screen.ANSWER })}>  
+              <Text style={styles.switchBtn}>Answer</Text>
+            </TouchableOpacity>
+          ):(
+            <TouchableOpacity  onPress={() => this.setState({ showScreen: screen.QUESTION })}>  
+              <Text style={styles.switchBtn}>Question</Text>
+            </TouchableOpacity>
+          )}       
+        </View>  
 
-              <View style={styles.btnContainer}>
-                <TouchableOpacity onPress={() => this.handleAnswer(answer.CORRECT, idx)}>
-                  <Text style={[styles.btn, styles.btnGreen]}>Correct</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity onPress={() => this.handleAnswer(answer.INCORRECT, idx)}>
-                  <Text style={[styles.btn, styles.btnRed]}>Incorrect</Text>
-                </TouchableOpacity> 
-              </View>
-            </View>           
-          )
-        })}
-
-      </View>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity onPress={() => this.handleAnswer(answer.CORRECT, index)}>
+            <Text style={[styles.btn, styles.btnGreen]}>Correct</Text>
+          </TouchableOpacity> 
+          <TouchableOpacity onPress={() => this.handleAnswer(answer.INCORRECT, index)}>
+            <Text style={[styles.btn, styles.btnRed]}>Incorrect</Text>
+          </TouchableOpacity> 
+        </View>
+      </View>           
     )   
   }  
 }
@@ -143,26 +148,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
   numberOfQuestions: {
     color: purple,
     fontWeight: "bold", 
     padding: 10
   },
-  question: { 
+  heading: { 
     fontSize: 40,
     textAlign: 'center',
     color: purple,
     fontWeight: "bold",
     marginTop: 100
-  },
-  answer:{
-    fontSize: 20,
-    textAlign: 'center',
-    color: purple,
-    fontWeight: "bold",
-    fontStyle: 'italic'
   },
   switchBtn: {
     marginTop: 20,
