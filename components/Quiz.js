@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
 
@@ -51,7 +51,7 @@ class Quiz extends React.Component {
       });
     }
    
-    if (index === totalOfQuestions) {
+    if (index + 1 === totalOfQuestions) {
       this.setState({ showScreen: screen.RESULT });
     } else {
       this.setState({showScreen: screen.QUESTION});
