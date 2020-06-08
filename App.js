@@ -46,6 +46,7 @@ const TabNav = () => (
     })}
     tabBarOptions={{
       activeTintColor: white,
+      //showIcon: true,
       style: {
         height: 50,
         backgroundColor: purple,

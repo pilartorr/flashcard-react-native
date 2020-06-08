@@ -8,7 +8,7 @@ const NOTIFICATION_KEY = 'flaschards: notifications'
  
 export function clearLocalNotification () {
 	return AsyncStorage.removeItem(NOTIFICATION_KEY)
-	.then(Notifications.cancelAllNotificationsAsync)
+	.then(Notifications.cancelAllScheduledNotificationsAsync())
 }
 
 function createNotification () {
@@ -38,15 +38,17 @@ export function setLocalNotification () {
                 tomorrow.setDate(tomorrow.getDate() + 1)
                 tomorrow.setHours(20)
                 tomorrow.setMinutes(0)
-
+                
+                //Notifications.presentLocalNotificationAsync(createNotification())
                 Notifications.scheduleLocalNotificationAsync(
                     createNotification(),
                     {
                     time: tomorrow,
                     repeat: 'day',
                     }
-                )
+                ) 
 
+                //console.log("Notifivation scheduled.")
                 AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))
                 }
             })

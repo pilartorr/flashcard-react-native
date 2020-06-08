@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 const screen = {
   QUESTION: 'question',
@@ -35,8 +36,6 @@ class Quiz extends React.Component {
   };
   handleAnswer = (response) => {
     const { index, totalOfQuestions } = this.state;
-    console.log('index: ', index)
-    console.log('totalQ: ', totalOfQuestions)
 
     if (response === answer.CORRECT) {
       this.setState({ 
@@ -51,6 +50,7 @@ class Quiz extends React.Component {
     }
    
     if (index + 1 === totalOfQuestions) {
+      //clearLocalNotification().then(setLocalNotification);
       this.setState({ showScreen: screen.RESULT });
     } else {
       this.setState({showScreen: screen.QUESTION});
