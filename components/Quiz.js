@@ -80,6 +80,7 @@ class Quiz extends React.Component {
 
     if (this.state.showScreen === screen.RESULT) {
       const percent = ((correctAnswer / totalOfQuestions) * 100).toFixed(0);
+      const { title } = this.props;
       return(
         <View style={styles.block}>
           <View>
@@ -91,13 +92,13 @@ class Quiz extends React.Component {
             <Text style={[styles.textBlock, styles.textRed]}>{percent}%</Text>
           </View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity onPress={this.handleReset}>
+            <TouchableOpacity onPress={() => this.props.navigation.replace('Quiz', {title: title})}>
               <Text style={[styles.btn, styles.btnRed]}>Restart Quiz</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { this.handleReset(); this.props.navigation.goBack(); }}>
+            <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
               <Text style={[styles.btn, styles.btnGreen]}>Go Back</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { this.handleReset(); this.props.navigation.navigate('Home'); }}>
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate('Home') }}>
               <Text style={[styles.btn, styles.btnPurple]}>Home</Text>
             </TouchableOpacity>
           </View>        
@@ -221,6 +222,7 @@ const mapStateToProps = (state, {route}) => {
   const title = route.params.title;
   const deck = state[title];
   return {
+    title,
     deck,
   };
 };
