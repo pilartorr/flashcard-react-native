@@ -3,7 +3,6 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import { white, blue, red, green, purple } from '../utils/colors';
 
-
 const screen = {
   QUESTION: 'question',
   ANSWER: 'answer',

@@ -2,6 +2,7 @@
 import React from 'react'
 import { View, StatusBar } from 'react-native'
 import Constants from "expo-constants";
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
 
 import DecksList from './components/DecksList'
 import AddDeck from './components/AddDeck'
@@ -34,6 +35,15 @@ const Tabs = createMaterialTopTabNavigator();
 const TabNav = () => (
   <Tabs.Navigator
     initialRouteName="DecksList"
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        if (route.name === "Decks") {
+          <Ionicons name="ios-bookmarks" size={size} color={color} />
+        } else if (route.name === "Add Deck") {
+          <FontAwesome name="plus-square" size={size} color={color} />
+        } 
+      }
+    })}
     tabBarOptions={{
       activeTintColor: white,
       style: {
