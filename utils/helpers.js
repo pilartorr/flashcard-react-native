@@ -5,10 +5,10 @@ import * as Permissions from 'expo-permissions';
 
 const NOTIFICATION_KEY = 'flaschards: notifications'
 
- 
-export function clearLocalNotification () {
-	return AsyncStorage.removeItem(NOTIFICATION_KEY)
-	.then(Notifications.cancelAllScheduledNotificationsAsync())
+export function clearLocalNotification() {
+    return AsyncStorage.removeItem(NOTIFICATION_KEY).then(
+        Notifications.cancelAllScheduledNotificationsAsync
+    );
 }
 
 function createNotification () {
@@ -55,3 +55,4 @@ export function setLocalNotification () {
         }
     })
 }
+
