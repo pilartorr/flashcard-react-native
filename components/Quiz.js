@@ -49,8 +49,8 @@ class Quiz extends React.Component {
       });
     }
    
-    if (index + 1 === totalOfQuestions) {
-      //clearLocalNotification().then(setLocalNotification);
+    if (index + 1 === totalOfQuestions) {  
+      clearLocalNotification().then(setLocalNotification);
       this.setState({ showScreen: screen.RESULT });
     } else {
       this.setState({showScreen: screen.QUESTION});
